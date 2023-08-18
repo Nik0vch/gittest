@@ -1,6 +1,7 @@
 import {DataSource, Repository} from 'typeorm';
 import {Injectable} from '@nestjs/common';
 import {UserEntity} from './users.entity';
+import { registUsersDto } from '../auth/dto/registUsers.dto';
 
 @Injectable()
 export class UsersRepository extends Repository<UserEntity> {
@@ -36,16 +37,17 @@ export class UsersRepository extends Repository<UserEntity> {
       offset = 'offset '+ (sortCondition.page - 1)*sortCondition.perPage;
     } 
 
-    return this.query('SELECT * FROM users ' + where + ' '+ orderBy + ' '+ limit + ' '+ offset + ';');
+    return this.query('SELECT id, first_name, last_name, age, email FROM users ' + where + ' '+ orderBy + ' '+ limit + ' '+ offset + ';');
   }
 
+  async getPasswordByEmail(email:string){
+    const query = this.query(`SELECT password FROM users where email = '${email}';`);    
+    return query.then((result:UserEntity[])=>{return result[0].password});;
+  }
+  
 
-  async createUser(firstName: string, lastName: string, age:number): Promise<UserEntity> {
-    const user = new UserEntity();
-    user.first_name = firstName;
-    user.last_name = lastName;
-    user.age = age;
 
+  async createUser(user:registUsersDto): Promise<UserEntity> {
     return this.save(user);
   }
 

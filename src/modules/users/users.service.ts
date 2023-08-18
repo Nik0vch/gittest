@@ -1,6 +1,7 @@
 import { Injectable, Get } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { UserEntity } from './users.entity';
+import { registUsersDto } from '../auth/dto/registUsers.dto';
 @Injectable()
 export class UsersService {
    constructor(private usersRepository: UsersRepository) {}
@@ -17,8 +18,16 @@ export class UsersService {
       return this.usersRepository.getOneById(id);
    }
 
-   async addUser(firstName:string, lastName:string, age:number){
-      this.usersRepository.createUser(firstName, lastName, age);
+   async getOneByEmail(email:string){
+      return this.usersRepository.findOne({where:{ email }});
+   }
+
+   async getPasswordByEmail(email:string):Promise<string>{
+      return this.usersRepository.getPasswordByEmail(email)
+   }
+
+   async addUser(user:registUsersDto){
+      this.usersRepository.createUser(user);
    }
 
    async deleteOneById(id: number){

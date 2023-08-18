@@ -1,10 +1,11 @@
 import { Body, Controller, Get, Post, Param, Delete , Put, Request } from '@nestjs/common';
 import {UsersService} from './users.service'
 import { UserDto } from './dto/users.dto';
-import { ApiParam } from '@nestjs/swagger';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { randomInt } from 'crypto';
 import { query } from 'express';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
@@ -30,12 +31,6 @@ export class UsersController {
         return this.usersService.getOneById(params.id);
     }
  
-    @Post()
-    addUser(@Body() body: UserDto) {
-        this.usersService.addUser(body.first_name, body.last_name, body.age);
-        return
-    }
-
     @Delete(':id')
     @ApiParam({name: 'id', type: Number})
     remove(@Param() params: any){
