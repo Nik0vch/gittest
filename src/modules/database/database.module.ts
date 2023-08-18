@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from 'src/users/users.entity';
+import { UserEntity } from '../users/users.entity';
 
 
 @Module({
@@ -12,8 +12,8 @@ import { UserEntity } from 'src/users/users.entity';
     password: '123',
     database: 'test',
     entities: [
+      UserEntity
         // __dirname + '/../**/*.entity{.ts,.js}',
-        UserEntity,
     ],
     synchronize: true,
   }),],
