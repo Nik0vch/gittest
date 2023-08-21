@@ -39,4 +39,8 @@ export class AuthService {
         const token = await this.tokenService.genetateJwtToken({userData});
         return {...existUser, token};
     }
+
+    async existToken(token){
+        return await this.tokenService.existToken(token);
+    }
 }

@@ -1,12 +1,9 @@
 import {ApiProperty} from '@nestjs/swagger';
 import {UserEntity} from '../users.entity';
 import {Exclude, Type} from '@nestjs/class-transformer';
-import { IsNumber, IsString } from '@nestjs/class-validator';
+import { IsNumber, IsString, IsInt } from '@nestjs/class-validator';
 
 export class UserDto {
-//   @ApiProperty({type: Number})
-//   @IsNumber()
-//   id: number;
 
   @ApiProperty({type: String})
   @IsString()
@@ -17,10 +14,12 @@ export class UserDto {
   last_name: string;
 
   @ApiProperty({type: Number})
-  @IsNumber()
+  @IsInt()
   age: number;
 
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);
   }
 }
+
+

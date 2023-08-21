@@ -40,6 +40,7 @@ export class UsersRepository extends Repository<UserEntity> {
     return this.query('SELECT id, first_name, last_name, age, email FROM users ' + where + ' '+ orderBy + ' '+ limit + ' '+ offset + ';');
   }
 
+  
   async getPasswordByEmail(email:string){
     const query = this.query(`SELECT password FROM users where email = '${email}';`);    
     return query.then((result:UserEntity[])=>{return result[0].password});;
