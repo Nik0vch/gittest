@@ -5,6 +5,7 @@ import { LoginUsersDto } from './dto/loginUser.dto';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from 'src/guards/jwt-guards';
 import { ApiTags } from '@nestjs/swagger';
+import { Request } from 'express'
 
 @ApiTags('auth')
 @Controller('auth')
@@ -26,11 +27,12 @@ export class AuthController {
         return this.authService.login(user);        
     }
     
-    @UseGuards(JwtAuthGuard)
+    //@UseGuards(JwtAuthGuard)
     @Post('test')
-    async test(@Req() req){     
-        const a = await this.userService.getOneByEmail(req.user.email);
-        console.log(a) ;
-        return a;
+    async test(@Req() req: Request){     
+        //const a = await this.userService.getOneByEmail(req.user.email);
+        const [type, token] = req.headers.authorization?.split(' ') ?? [];
+        console.log(token);
+        return await this.authService.existToken(token);
     }
 }
