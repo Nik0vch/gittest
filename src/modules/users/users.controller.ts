@@ -5,7 +5,7 @@ import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { randomInt } from 'crypto';
 import { query } from 'express';
 import { UserResponseDto } from './dto/userResponse.dto';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
 
 @ApiTags('users')
 @Controller('users')
@@ -33,27 +33,22 @@ export class UsersController {
     //     return this.usersService.getOneById(params.id);
     // }
 
-    @Get(':id') 
+    @Get(':id')//Запрос пользователя по id 
     @ApiOkResponse({type: UserResponseDto})
     @ApiParam({name: 'id', type: Number})
-    async getUserById(@Param() params: any): Promise<UserResponseDto> {
+    async getUserById(@Param() params: any) {
         const user = await this.usersService.getOneById(params.id);
-        return new UserResponseDto(user);
-        // console.log(user);
-        // return plainToClass(UserResponseDto, user, {
-        //     excludeExtraneousValues: true,
-        //     enableImplicitConversion: true
-        // });
+        return plainToClass(UserResponseDto, user);
     }
  
-    @Delete(':id')
+    @Delete(':id')//Удаление пользователя по id 
     @ApiParam({name: 'id', type: Number})
-    remove(@Param() params: any){
-        this.usersService.deleteOneById(params.id)
-        return
+    async remove(@Param() params: any){
+        return await this.usersService.deleteOneById(params.id)
+        
     }
 
-    @Put(':id')
+    @Put(':id')//Редактирование пользователя по id
     @ApiParam({name: 'id', type: Number})
     change(@Body() body: UserDto, @Param() params: any): void{
         this.usersService.changUser(params.id, body.first_name, body.last_name, body.age)

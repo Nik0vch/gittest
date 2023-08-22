@@ -1,7 +1,8 @@
 import {DataSource, Repository} from 'typeorm';
-import {Injectable} from '@nestjs/common';
+import {BadRequestException, Injectable} from '@nestjs/common';
 import {UserEntity} from './users.entity';
 import { registUsersDto } from '../auth/dto/registUsers.dto';
+import { UserUpdateDto } from './dto/userUpdate.dto';
 
 @Injectable()
 export class UsersRepository extends Repository<UserEntity> {
@@ -46,7 +47,9 @@ export class UsersRepository extends Repository<UserEntity> {
     return query.then((result:UserEntity[])=>{return result[0].password});;
   }
   
-
+  async getOneByEmail(email:string){
+    return this.findOne({where:{ email }});
+ }
 
   async createUser(user:registUsersDto): Promise<UserEntity> {
     return this.save(user);
@@ -59,6 +62,15 @@ export class UsersRepository extends Repository<UserEntity> {
     user.last_name = lastName;
     user.age = age;
     return this.save(user);
+  }
+
+  async updateUserByEmail(email: string, dto: UserUpdateDto){
+    const user = await this.getOneByEmail(email);
+    if (user) new BadRequestException("Нет пользователя с таким email");
+    user.first_name = dto.first_name;
+    user.last_name = dto.last_name;
+    user.age = dto.age;
+    return this.save(user);    
   }
 
 
