@@ -7,11 +7,18 @@ export class TokenService {
     constructor(private readonly jwtService: JwtService)
     {}
 
-    async genetateJwtToken(user){
+    async genetateAccessToken(user){
         const payload = { user };
         return this.jwtService.sign(payload, {
             secret: "secretWord",
-            expiresIn: "20s"
+            expiresIn: "10m"
+        });
+    }
+    async generateRefreshToken(user){
+        const payload = { user };
+        return this.jwtService.sign(payload, {
+            secret: "secretRefreshWord",
+            expiresIn: "20m"
         });
     }
 
@@ -24,7 +31,14 @@ export class TokenService {
         }
     }
 
-    // async refreshToken(){
+    async existRefreshToken(token){
+        try {
+            const payload = await this.jwtService.verifyAsync(token, {secret: "secretRefreshWord"});
+            return payload
+        } catch(e) {
+            throw new UnauthorizedException()
+        }
+    }
 
-    // }
+    
 }

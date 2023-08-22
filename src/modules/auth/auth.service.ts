@@ -36,11 +36,26 @@ export class AuthService {
             email:user.email,
             first_name:existUser.first_name
         }
-        const token = await this.tokenService.genetateJwtToken({userData});
-        return {...existUser, token};
+        const tokens = {
+            access_token: await this.tokenService.genetateAccessToken({...userData}),
+            refresh_token: await this.tokenService.generateRefreshToken({...userData})
+        }
+        return {...existUser, ...tokens};
     }
+
+    async refreshToken(dataToken){
+        const tokens = {
+            access_token: await this.tokenService.genetateAccessToken({...dataToken}),
+            refresh_token: await this.tokenService.generateRefreshToken({...dataToken})
+        }
+        return tokens;
+    }
+
 
     async existToken(token){
         return await this.tokenService.existToken(token);
+    }
+    async existRefreshToken(token){
+        return await this.tokenService.existRefreshToken(token);
     }
 }
