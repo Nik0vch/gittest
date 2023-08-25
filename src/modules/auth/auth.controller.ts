@@ -14,25 +14,24 @@ import { plainToClass } from 'class-transformer';
 @Controller('auth')
 export class AuthController {
 
-   constructor(
-    private authService: AuthService,
-    private userService: UsersService
-    )
-   {}
+    constructor(
+        private authService: AuthService,
+        private userService: UsersService
+    ) { }
 
     @Post('regist')//Регистрация пользователя
-    registration(@Body() user:registUsersDto){
+    registration(@Body() user: registUsersDto) {
         return this.authService.registration(user);
     }
 
     @Post('login')//Авторизация пользователя
-    login(@Body() user:LoginUsersDto){
-        return this.authService.login(user);        
+    login(@Body() user: LoginUsersDto) {
+        return this.authService.login(user);
     }
 
     //@UseGuards(JwtAuthGuard)//Смена токена
     @Post('refresh')
-    async refreshToken(@Req() req: Request){
+    async refreshToken(@Req() req: Request) {
         const [type, token] = req.headers.authorization?.split(' ') ?? [];
         const dataToken = await this.authService.existRefreshToken(token);
         return await this.authService.refreshToken(dataToken.user);
@@ -41,14 +40,14 @@ export class AuthController {
 
     @UseGuards(JwtAuthGuard)//Тестовая проверка на токен
     @Post('test')
-    async test(@Req() req: Request){     
-        const [type, token] = req.headers.authorization?.split(' ') ?? []; 
+    async test(@Req() req: Request) {
+        const [type, token] = req.headers.authorization?.split(' ') ?? [];
         return await this.authService.existToken(token);
     }
-    
+
     @UseGuards(JwtAuthGuard)//редактирование авторизованного пользователя
     @Patch('update')
-    async updateUser(@Req() req: Request, @Body() userUpdateDto: UserUpdateDto):Promise<UserResponseDto>{     
+    async updateUser(@Req() req: Request, @Body() userUpdateDto: UserUpdateDto): Promise<UserResponseDto> {
         const [type, token] = req.headers.authorization?.split(' ') ?? [];
         const dataToken = await this.authService.existToken(token);
         return await this.userService.updateUserByEmail(dataToken.user.email, userUpdateDto);
