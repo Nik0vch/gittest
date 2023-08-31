@@ -5,6 +5,6 @@ export class AppController {
 
     @Get()
     async start() {
-        return "TEST";
+        return process.env.HELLOW;        
     }
 }

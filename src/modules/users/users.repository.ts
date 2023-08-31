@@ -3,13 +3,20 @@ import {BadRequestException, Injectable} from '@nestjs/common';
 import {UserEntity} from './users.entity';
 import { registUsersDto } from '../auth/dto/registUsers.dto';
 import { UserUpdateDto } from './dto/userUpdate.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UsersRepository extends Repository<UserEntity> {
   
-  constructor(private readonly dataSource: DataSource) {
-    super(UserEntity, dataSource.createEntityManager());
+  constructor(
+    private readonly dataSource: DataSource,
+    private readonly configService: ConfigService,    
+    ) {
+    super(UserEntity, dataSource.createEntityManager());    
   }
+
+  private TABLE_USERS = this.configService.get<string>("TABLE_USERS");
+
 
   async getAll(): Promise<UserEntity[]> {
     return this.find();
@@ -37,13 +44,13 @@ export class UsersRepository extends Repository<UserEntity> {
       limit = 'limit '+ sortCondition.perPage;
       offset = 'offset '+ (sortCondition.page - 1)*sortCondition.perPage;
     } 
-
-    return this.query('SELECT id, first_name, last_name, age, email FROM users ' + where + ' '+ orderBy + ' '+ limit + ' '+ offset + ';');
+    
+    return this.query(`SELECT id, first_name, last_name, age, email FROM ${this.TABLE_USERS} ${where} ${orderBy} ${limit} ${offset};`);
   }
 
   
   async getPasswordByEmail(email:string){
-    const query = this.query(`SELECT password FROM users where email = '${email}';`);    
+    const query = this.query(`SELECT password FROM ${this.TABLE_USERS} where email = '${email}';`);    
     return query.then((result:UserEntity[])=>{return result[0].password});;
   }
   
@@ -72,7 +79,5 @@ export class UsersRepository extends Repository<UserEntity> {
     user.age = dto.age;
     return this.save(user);    
   }
-
-
 
 }
