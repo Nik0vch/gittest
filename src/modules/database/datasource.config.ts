@@ -16,7 +16,7 @@ export const dataSourseOptions: DataSourceOptions = {
     synchronize: false,
     migrations: ['dist/migrations/*.js'],
     migrationsRun: true,
-    logging: 'all',Nik0vch
+    logging: 'all',
 }
 
 const dataSource = new DataSource(dataSourseOptions);
