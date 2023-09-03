@@ -20,4 +20,7 @@ export class UserEntity {
   
   @Column('text', {select: false, nullable: false})
   password: string;
+
+  @Column('boolean', {nullable: false})
+  activated: boolean;
 }

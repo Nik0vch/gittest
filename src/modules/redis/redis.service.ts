@@ -49,6 +49,10 @@ export class RedisService {
         return this.redis.sMembers(key);
     }
 
+    async del(key) {
+        return this.redis.del(key);
+    }
+
 
     // async onModuleInit() {
     //     console.log(await this.hgetAll('aaa'));

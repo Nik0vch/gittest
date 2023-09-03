@@ -13,13 +13,13 @@ export class CreateUsersTable1692954484446 implements MigrationInterface {
                     isGenerated: true,
                     generationStrategy: "increment",
                 },
-                {
-                    name: "firstName",
+                { 
+                    name: "first_name",
                     type: "text",
                     isNullable: false,
                 },
                 {
-                    name: "lastName",
+                    name: "last_name",
                     type: "text",
                     isNullable: false,
                 },

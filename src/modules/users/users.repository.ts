@@ -30,11 +30,12 @@ export class UsersRepository extends Repository<UserEntity> {
   async getByFilter(sortCondition:any){
     let orderBy = '', where = '', offset = '', limit = '';
 
-    if(sortCondition.first_name || sortCondition.last_name || sortCondition.age){
+    if(sortCondition.first_name || sortCondition.last_name || sortCondition.age || sortCondition.activ){
       where = 'where ';
       if(sortCondition.first_name) where += ('first_name = \'' + sortCondition.first_name + '\' and ');
       if(sortCondition.last_name) where += ('last_name = \'' + sortCondition.last_name + '\' and ');
       if(sortCondition.age) where += ('age = \'' + sortCondition.age + '\' and ');
+      if(sortCondition.activ) where += ('activated = ' + sortCondition.activ + ' and ');
       where = where.slice(0, -5);
     }
 
@@ -45,7 +46,7 @@ export class UsersRepository extends Repository<UserEntity> {
       offset = 'offset '+ (sortCondition.page - 1)*sortCondition.perPage;
     } 
     
-    return this.query(`SELECT id, first_name, last_name, age, email FROM ${this.TABLE_USERS} ${where} ${orderBy} ${limit} ${offset};`);
+    return this.query(`SELECT id, first_name, last_name, age, email, activated FROM ${this.TABLE_USERS} ${where} ${orderBy} ${limit} ${offset};`);
   }
 
   
@@ -78,6 +79,13 @@ export class UsersRepository extends Repository<UserEntity> {
     user.last_name = dto.last_name;
     user.age = dto.age;
     return this.save(user);    
+  }
+
+  async activByEmail(email: string):Promise<boolean>{
+    let user = await this.getOneByEmail(email);
+    user.activated = true;
+    if(this.save(user)) return true;
+    else false;
   }
 
 }

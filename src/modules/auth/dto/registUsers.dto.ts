@@ -1,8 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { IsInt, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { UserEntity } from 'src/modules/users/users.entity';
 
 export class registUsersDto {
+  constructor(partial: Partial<UserEntity>) {
+    Object.assign(this, partial);
+  }
 
   @ApiProperty({ type: String, description: "Имя пользователя" })
   @IsString()

@@ -1,6 +1,5 @@
 import { DataSource, DataSourceOptions } from 'typeorm'
 import { UserEntity } from '../users/users.entity'
-import { resolve } from 'path';
 
 export const dataSourseOptions: DataSourceOptions = {
 
@@ -17,7 +16,7 @@ export const dataSourseOptions: DataSourceOptions = {
     synchronize: false,
     migrations: ['dist/migrations/*.js'],
     migrationsRun: true,
-    logging: 'all',
+    logging: 'all',Nik0vch
 }
 
 const dataSource = new DataSource(dataSourseOptions);

@@ -43,4 +43,9 @@ export class UsersService {
      return this.usersRepository.updateUserByEmail(email, dto);
    }
 
+   async activatedByEmail(email: string): Promise<boolean>{
+      return this.usersRepository.activByEmail(email);
+    }
+   
+
 }

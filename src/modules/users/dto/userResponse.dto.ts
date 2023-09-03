@@ -30,5 +30,9 @@ export class UserResponseDto {
 
   @Exclude()
   password: string;
+  
+  @ApiProperty({ type: String, description: "Активация пользователя" })
+  @Expose()
+  activated: boolean;
 
 }

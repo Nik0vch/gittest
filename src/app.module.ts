@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { RedisModule } from './modules/redis/redis.module';
 import { CreateUsersTable1692954484446 } from './migrations/1692954484446-create_users_table.js';
+import { EmailModule } from './modules/email/email.module';
 
 
 @Module({
@@ -16,9 +17,9 @@ import { CreateUsersTable1692954484446 } from './migrations/1692954484446-create
     UsersModule,
     AuthModule,
     TokenModule,
-    //RedisModule,
+    RedisModule,
     ConfigModule.forRoot({ isGlobal: true }),
-
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [JwtService],

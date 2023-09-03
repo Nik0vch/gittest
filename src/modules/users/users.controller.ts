@@ -16,6 +16,7 @@ export class UsersController {
             'first_name': query.first_name ?? null,
             'last_name': query.last_name ?? null,
             'age': query.age ?? null,
+            'activ': query.activ ?? null,
             'sort': query.sort ?? null,
             'order': query.order ?? '',//asc - по возрастанию, desc - по убыванию
             'page': query.page ?? 1,
